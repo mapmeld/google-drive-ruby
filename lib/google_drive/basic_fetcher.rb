@@ -9,7 +9,7 @@ Net::HTTP.version_1_2
 module GoogleDrive
 
     class BasicFetcher #:nodoc:
-        
+
         def initialize(proxy)
           if proxy
             @proxy = proxy
@@ -20,10 +20,11 @@ module GoogleDrive
             @proxy = Net::HTTP
           end
         end
-        
+
         def request_raw(method, url, data, extra_header, auth)
           uri = URI.parse(url)
           http = @proxy.new(uri.host, uri.port)
+          http.read_timeout = 180
           http.use_ssl = true
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           http.start() do
@@ -36,13 +37,13 @@ module GoogleDrive
             end
           end
         end
-        
+
       private
-        
+
         def auth_header(auth)
           return {}
         end
 
     end
-    
+
 end
